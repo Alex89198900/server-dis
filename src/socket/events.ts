@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { App } from '../app';
+import { App } from '../../index';
 import User, { Availability } from '../models/user';
 import { AppSocket, ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './types';
 

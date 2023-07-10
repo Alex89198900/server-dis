@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { App } from '../app';
+import { App } from '../../index';
 import { bindSocketEvents } from './events';
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './types';
 
