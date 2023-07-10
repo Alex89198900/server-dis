@@ -7,18 +7,24 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import { Server } from 'socket.io';
-import serversRoutes from './routes/servers';
-import usersRoutes from './routes/users';
-import personalMessagesRoutes from './routes/personal-messages';
-import chatsRoutes from './routes/chats';
-import channelsRoutes from './routes/channels';
-import testRoutes from './routes/test';
-import { initSocket } from './socket';
+import serversRoutes from './src/routes/servers';
+import usersRoutes from './src/routes/users';
+import personalMessagesRoutes from './src/routes/personal-messages';
+import chatsRoutes from './src/routes/chats';
+import channelsRoutes from './src/routes/channels';
+import testRoutes from './src/routes/test';
+import { initSocket } from './src/socket';
 import cors from 'cors';
-import * as passportConfig from './passport';
-import env from './config';
+import * as passportConfig from './src/passport';
+import env from './src/config';
 import passport from 'passport';
-import { AppSocket, ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './socket/types';
+import {
+  AppSocket,
+  ClientToServerEvents,
+  InterServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from './src/socket/types';
 
 declare module 'express-session' {
   interface SessionData {
