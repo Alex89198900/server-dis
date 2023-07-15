@@ -3,7 +3,11 @@ import PersonalMessage from '../models/personal-message';
 import { DeletedRequestQuery } from '../routes/personal-messages';
 import { personalMessageDTO } from '../utils/dto';
 import { FetchedPersonalMessage } from '../utils/dto';
-
+import { Request, Response, NextFunction } from 'express';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import sharp from 'sharp';
+import fs from 'fs';
 const getPersonalMessages: Handler = (req, res, next) => {
   let docsCount = 0;
 
@@ -36,16 +40,30 @@ const getPersonalMessages: Handler = (req, res, next) => {
     });
 };
 
-const createPersonalMessage: Handler = (req, res, next) => {
+const createPersonalMessage: Handler = async (req: Request, res: Response, next: NextFunction) => {
+  let file: any = req.files ? req.files : '';
+
+  // let fileNameres = '';
+  // let fileName = uuidv4() + '.jpg';
+  // if (file) {
+  //   file.img.mv(path.resolve(__dirname, '../../', 'static', fileName));
+  //   fileNameres = fileName;
+  // }
+
+  let imageBuffer: Buffer | null = null;
+  if (req.file) {
+    const buffer = await sharp(req.file.path).resize().jpeg({ quality: 70 }).toBuffer();
+    fs.unlinkSync(req.file.path);
+    imageBuffer = Buffer.from(buffer.toString('base64'), 'base64');
+  }
   const personalMessage = new PersonalMessage({
     fromUserId: req.body.fromUserId,
     toUserId: req.body.toUserId,
     responsedToMessageId: req.body.responsedToMessageId,
     responsedToMessage: req.body.responsedToMessageId,
     message: req.body.message,
-    img: req.body.img,
+    img: imageBuffer,
   });
-  console.log(personalMessage);
   personalMessage
     .save()
     .then(() => {

@@ -1,5 +1,5 @@
-import { ChannelInviteStatus } from "../models/channel-invite";
-import { Availability } from "../models/user";
+import { ChannelInviteStatus } from '../models/channel-invite';
+import { Availability } from '../models/user';
 
 interface DTOEntity {
   id: string;
@@ -15,14 +15,14 @@ export interface DTOUser extends DTOEntity {
   friends: string[];
   invitesFrom: string[];
   invitesTo: string[];
-  invitesToChannels: DTOChannel[],
-  joinedChannels: DTOChannel[],
+  invitesToChannels: DTOChannel[];
+  joinedChannels: DTOChannel[];
   createdAt: Date;
   profile: {
     avatar: string | null;
     about: string | null;
     banner: string | null;
-  }
+  };
 }
 
 export interface DTOPersonalMessage extends DTOEntity {
@@ -31,6 +31,7 @@ export interface DTOPersonalMessage extends DTOEntity {
   responsedToMessageId: string | null;
   date: Date;
   message: string;
+  img: string | null;
   responsedToMessage: DTOPersonalMessage | null;
 }
 
@@ -41,6 +42,7 @@ export interface DTOChannelMessage extends DTOEntity {
   responsedToMessageId: string | null;
   date: Date;
   message: string;
+  img: null | string;
   responsedToMessage: DTOChannelMessage | null;
 }
 
@@ -50,7 +52,7 @@ export interface DTOServer extends DTOEntity {
   owner: {
     id: string;
     name: string;
-  } | null
+  } | null;
 }
 
 export interface DTOChannel extends DTOEntity {

@@ -9,7 +9,7 @@ export interface PersonalMessageDocument {
   responsedToMessageId: Types.ObjectId;
   date: Date;
   message: string;
-  img: string;
+  img: string | null;
   responsedToMessage: PersonalMessageDocument | null;
 }
 
@@ -51,7 +51,10 @@ export const personalMessageSchema = new Schema<
     required: true,
   },
   img: {
-    type: String,
+    type: Buffer,
+    get(image: Buffer | null) {
+      return image ? image.toString('base64') : null;
+    },
   },
   responsedToMessage: {
     type: Types.ObjectId,

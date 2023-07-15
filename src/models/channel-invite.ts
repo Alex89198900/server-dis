@@ -7,6 +7,7 @@ export interface ChannelInviteDocument {
   messageId: Types.ObjectId;
   date: Date;
   message: string;
+  img: string;
   status: ChannelInviteStatus;
 }
 
@@ -15,7 +16,10 @@ export enum ChannelInviteStatus {
   Accepted = 'accepted',
 }
 
-export const ChannelInviteStatusEnum: ChannelInviteStatus[] = [ChannelInviteStatus.Pending, ChannelInviteStatus.Accepted];
+export const ChannelInviteStatusEnum: ChannelInviteStatus[] = [
+  ChannelInviteStatus.Pending,
+  ChannelInviteStatus.Accepted,
+];
 
 interface ChannelInviteQueryHelpers {
   byStatus(
@@ -56,11 +60,14 @@ export const channelInviteSchema = new Schema<
     required: true,
     default: '',
   },
+  img: {
+    type: String,
+  },
   status: {
     type: String,
     enum: ChannelInviteStatusEnum,
     default: ChannelInviteStatus.Pending,
-  }
+  },
 });
 
 channelInviteSchema.query.byStatus = function byStatus(

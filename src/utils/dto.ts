@@ -1,6 +1,14 @@
 import { HydratedDocument } from 'mongoose';
 import { UserDocument } from '../models/user';
-import { DTOChat, DTOUser, DTOPersonalMessage, DTOChannelMessage, DTOChannel, DTOChannelInvite, DTOServer } from '../types/dto';
+import {
+  DTOChat,
+  DTOUser,
+  DTOPersonalMessage,
+  DTOChannelMessage,
+  DTOChannel,
+  DTOChannelInvite,
+  DTOServer,
+} from '../types/dto';
 import { PersonalMessageDocument } from '../models/personal-message';
 import { ChannelDocument } from '../models/channel';
 import { ChannelMessageDocument } from '../models/channel-message';
@@ -55,7 +63,7 @@ export const userDTO = ({
         name: channel?.name,
         serverId: channel?.serverId?.toString(),
         general: channel?.general || false,
-      }
+      };
     }),
     joinedChannels: (joinedChannels || []) as unknown as DTOChannel[],
     createdAt,
@@ -63,7 +71,7 @@ export const userDTO = ({
       avatar: profile.avatar ? profile.avatar.toString('base64') : null,
       about: profile.about ?? null,
       banner: profile.banner ?? null,
-    }
+    },
   };
 };
 
@@ -82,6 +90,7 @@ export const personalMessageDTO = ({
   responsedToMessage,
   date,
   message,
+  img,
 }: FetchedPersonalMessage): DTOPersonalMessage | null => {
   if (!fromUserId) {
     return null;
@@ -93,6 +102,7 @@ export const personalMessageDTO = ({
     responsedToMessageId: responsedToMessageId ? responsedToMessageId.toString() : null,
     date,
     message,
+    img,
     responsedToMessage: responsedToMessage ? personalMessageDTO(responsedToMessage as FetchedPersonalMessage) : null,
   };
 };
@@ -106,6 +116,7 @@ export const channelMessageDTO = ({
   responsedToMessage,
   date,
   message,
+  img,
 }: FetchedChannelMessage): DTOChannelMessage | null => {
   if (!userId) {
     return null;
@@ -118,11 +129,12 @@ export const channelMessageDTO = ({
     responsedToMessageId: responsedToMessageId ? responsedToMessageId.toString() : null,
     date,
     message,
+    img,
     responsedToMessage: responsedToMessage ? channelMessageDTO(responsedToMessage as FetchedChannelMessage) : null,
   };
 };
 
-export const serverDTO = ({_id, image, name, owner}: FetchedServer): DTOServer => {
+export const serverDTO = ({ _id, image, name, owner }: FetchedServer): DTOServer => {
   const ownerUser = owner as unknown as FetchedUser;
 
   return {
@@ -130,8 +142,8 @@ export const serverDTO = ({_id, image, name, owner}: FetchedServer): DTOServer =
     name: name,
     image: image,
     owner: owner ? { id: ownerUser._id.toString(), name: ownerUser.name } : null,
-  }
-}
+  };
+};
 
 export const channelDTO = ({ _id, name, serverId, general }: FetchedChannel): DTOChannel => {
   return {
@@ -142,7 +154,15 @@ export const channelDTO = ({ _id, name, serverId, general }: FetchedChannel): DT
   };
 };
 
-export const channelInviteDTO = ({_id, userId, channelId, date, message, status, messageId }: FetchedChannelInvite): DTOChannelInvite => {
+export const channelInviteDTO = ({
+  _id,
+  userId,
+  channelId,
+  date,
+  message,
+  status,
+  messageId,
+}: FetchedChannelInvite): DTOChannelInvite => {
   return {
     id: _id.toString(),
     userId: userId.toString(),
@@ -151,5 +171,5 @@ export const channelInviteDTO = ({_id, userId, channelId, date, message, status,
     date,
     message,
     status,
-  }
-}
+  };
+};

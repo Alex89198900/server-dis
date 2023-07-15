@@ -24,13 +24,12 @@ const getServers: Handler = (req, res, next) => {
         }),
       });
     })
-    .catch((err) => requestErrorHandler(err, next))
+    .catch((err) => requestErrorHandler(err, next));
 };
 
 const getServer: Handler = (req, res, next) => {
   const serverId = req.params.id;
-  Server
-    .findById(serverId)
+  Server.findById(serverId)
     .populate('owner')
     .then((server) => {
       if (!server) {
@@ -38,9 +37,11 @@ const getServer: Handler = (req, res, next) => {
         //error.statusCode = 404;
         throw error;
       }
-      res.status(200).json({ messageInfo: 'Server fetched.', server: serverDTO(server as FetchedServer & { image: Buffer }) });
+      res
+        .status(200)
+        .json({ messageInfo: 'Server fetched.', server: serverDTO(server as FetchedServer & { image: Buffer }) });
     })
-    .catch((err) => requestErrorHandler(err, next))
+    .catch((err) => requestErrorHandler(err, next));
 };
 
 const createServer: Handler = async (req, res, next) => {
@@ -58,20 +59,18 @@ const createServer: Handler = async (req, res, next) => {
     image: imageBuffer,
     owner: req.body.owner,
   });
-
+  console.log(server);
   server
     .save()
     .then(() => {
-      server
-        .populate('owner')
-        .then((server) => {
-          res.status(201).json({
-            message: 'Server created successfully!',
-            server: serverDTO(server as FetchedServer & { image: Buffer }),
-          });
-        })
+      server.populate('owner').then((server) => {
+        res.status(201).json({
+          message: 'Server created successfully!',
+          server: serverDTO(server as FetchedServer & { image: Buffer }),
+        });
+      });
     })
-    .catch((err) => requestErrorHandler(err, next))
+    .catch((err) => requestErrorHandler(err, next));
 };
 
 const updateServer: Handler = (req, res, next) => {
@@ -89,13 +88,13 @@ const updateServer: Handler = (req, res, next) => {
       return server.save();
     })
     .then((server) => {
-      server
-        .populate('owner')
-        .then((server) => {
-          res.status(200).json({ messageInfo: 'Server updated!', server: serverDTO(server as FetchedServer & { image: Buffer }) });
-        })
+      server.populate('owner').then((server) => {
+        res
+          .status(200)
+          .json({ messageInfo: 'Server updated!', server: serverDTO(server as FetchedServer & { image: Buffer }) });
+      });
     })
-    .catch((err) => requestErrorHandler(err, next))
+    .catch((err) => requestErrorHandler(err, next));
 };
 const deleteServer: Handler = (req, res, next) => {
   const serverId = req.params.id;
@@ -111,7 +110,7 @@ const deleteServer: Handler = (req, res, next) => {
     .then((result) => {
       res.status(200).json({ messageInfo: 'Deleted server.' });
     })
-    .catch((err) => requestErrorHandler(err, next))
+    .catch((err) => requestErrorHandler(err, next));
 };
 
 const getChannels: Handler = (req, res, next) => {
@@ -130,7 +129,7 @@ const getChannels: Handler = (req, res, next) => {
         channels: channels.map((channel) => channelDTO(channel as FetchedChannel)),
       });
     })
-    .catch((err) => requestErrorHandler(err, next))
+    .catch((err) => requestErrorHandler(err, next));
 };
 
 export default { getServers, createServer, getServer, updateServer, deleteServer, getChannels };

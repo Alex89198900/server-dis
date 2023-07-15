@@ -8,50 +8,48 @@ import { handleDocumentNotFound, requestErrorHandler } from '../utils/functions'
 const getChats: Handler = (req, res, next) => {
   const userId = req.params.userId;
 
-  User
-    .findById(userId)
+  User.findById(userId)
     .populate('chats')
     .then((user) => {
       if (handleDocumentNotFound(user)) {
-        res.status(200).json({ chats: (user.chats || []).map((c) => chatDTO(c as FetchedChat))})
+        res.status(200).json({ chats: (user.chats || []).map((c) => chatDTO(c as FetchedChat)) });
       } else {
-        res.status(200).json({ chats: []});
+        res.status(200).json({ chats: [] });
       }
-    })
+    });
 };
 
 const getChat = (req: TypedRequest, res: Response, next: NextFunction): void => {
   const { userOneId, userTwoId } = req.params;
-  
-  User
-    .findById(userTwoId)
+
+  User.findById(userTwoId)
     // .populate('chats')
     .then((user) => {
       if (handleDocumentNotFound(user)) {
         res.status(200).json({ chat: chatDTO(user as FetchedChat) });
       }
     })
-      .catch(err => requestErrorHandler(err, next)());
-}
+    .catch((err) => requestErrorHandler(err, next)());
+};
 
 const deleteChat: Handler = (req, res, next) => {
   const { userOneId, userTwoId } = req.params;
 
-  User
-    .findById(userOneId)
+  User.findById(userOneId)
     .populate('chats')
     .then((user) => {
       if (handleDocumentNotFound(user)) {
         user.chats = user.chats.filter(({ id }) => id.toString() !== userTwoId);
 
-        user.save()
+        user
+          .save()
           .then(() => {
             res.status(200).json({ message: 'Chat deleted successfully' });
           })
-          .catch(err => requestErrorHandler(err, next)());
+          .catch((err) => requestErrorHandler(err, next)());
       }
     })
-    .catch(err => requestErrorHandler(err, next)());
+    .catch((err) => requestErrorHandler(err, next)());
 };
 
 const getChatMessages: Handler = (req, res, next) => {
@@ -60,7 +58,7 @@ const getChatMessages: Handler = (req, res, next) => {
   PersonalMessage.find({
     $or: [
       { $and: [{ fromUserId: userOneId }, { toUserId: userTwoId }] },
-      { $and: [{ fromUserId: userTwoId }, { toUserId: userOneId }] }
+      { $and: [{ fromUserId: userTwoId }, { toUserId: userOneId }] },
     ],
   })
     .populate('responsedToMessage')
@@ -104,23 +102,24 @@ const createChat: RequestHandler = (req, res, next) => {
 
           const chatsOne = [...new Set((userOne.chats || []).map((c) => c.id).concat(userTwo.id))];
           const chatsTwo = [...new Set((userTwo.chats || []).map((c) => c.id).concat(userOne.id))];
-          
+
           userOne.chats = chatsOne;
           userTwo.chats = chatsTwo;
 
           userOne
             .save()
             .then(() => {
-              userTwo.save()
-              .then(() => {
-                res.status(200).end();
-              })
-              .catch((err) => {
-                if (!err.statusCode) {
-                  err.statusCode = 500;
-                }
-                next(err);
-              });
+              userTwo
+                .save()
+                .then(() => {
+                  res.status(200).end();
+                })
+                .catch((err) => {
+                  if (!err.statusCode) {
+                    err.statusCode = 500;
+                  }
+                  next(err);
+                });
             })
             .catch((err) => {
               if (!err.statusCode) {
@@ -128,8 +127,8 @@ const createChat: RequestHandler = (req, res, next) => {
               }
               next(err);
             });
-        })
-    })
-}
+        });
+    });
+};
 
 export default { getChats, deleteChat, getChatMessages, createChat, getChat };

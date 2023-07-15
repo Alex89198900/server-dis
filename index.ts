@@ -25,7 +25,9 @@ import {
   ServerToClientEvents,
   SocketData,
 } from './src/socket/types';
-
+import fileUpload from 'express-fileupload';
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 declare module 'express-session' {
   interface SessionData {
     returnTo: string;
@@ -75,9 +77,13 @@ export class App {
         credentials: true,
       })
     );
+
     app.use(compression());
     app.use(express.json());
+
     app.use(bodyParser.urlencoded({ extended: true }));
+    // app.use(express.static(path.resolve(__dirname, 'static')));
+    // app.use(fileUpload());
     app.use(
       session({
         resave: true,

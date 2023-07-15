@@ -5,6 +5,11 @@ import { FetchedChannelMessage, channelDTO, channelInviteDTO, channelMessageDTO 
 import { FetchedChannel } from '../utils/dto';
 import ChannelMessage from '../models/channel-message';
 import { requestErrorHandler } from '../utils/functions';
+import { Request, Response, NextFunction } from 'express';
+import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 const getChannels: Handler = (req, res, next) => {
   let docsCount = 0;
   Channel.find()
@@ -137,16 +142,34 @@ const getChannelMessages: Handler = (req, res, next) => {
     });
 };
 
-const createChannelMessage: Handler = (req, res, next) => {
+const createChannelMessage = async (req: Request, res: Response, next: NextFunction) => {
+  let file: any = req.files ? req.files : '';
+
+  // let fileNameres = '';
+  // let fileName = uuidv4() + '.jpg';
+  // if (file) {
+  //   file.img.mv(path.resolve(__dirname, '../../', 'static', fileName));
+  //   fileNameres = fileName;
+  // }
+
+  let imageBuffer: Buffer | null = null;
+  if (req.file) {
+    const buffer = await sharp(req.file.path).resize().jpeg({ quality: 70 }).toBuffer();
+    fs.unlinkSync(req.file.path);
+    imageBuffer = Buffer.from(buffer.toString('base64'), 'base64');
+    // const image = fs.readFileSync(req.file.path);
+    // const encImage = image.toString('base64');
+    // imageBuffer = Buffer.from(encImage, 'base64');
+  }
   const channelMessage = new ChannelMessage({
     userId: req.body.userId,
     channelId: req.body.channelId,
     responsedToMessageId: req.body.responsedToMessageId,
     responsedToMessage: req.body.responsedToMessageId,
     message: req.body.message,
+    img: imageBuffer,
     service: req.body.service,
   });
-
   channelMessage
     .save()
     .then((channelMessage) => {
@@ -215,7 +238,7 @@ const deleteChannelMessage: Handler = (req, res, next) => {
 };
 
 const getChannelInvitesByChannelId: Handler = (req, res, next) => {
-  const {  channelId } = req.params;
+  const { channelId } = req.params;
   ChannelInvite.find({ channelId })
     .then((invites) => {
       res.status(200).json({
