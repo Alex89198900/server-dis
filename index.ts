@@ -67,12 +67,7 @@ export class App {
     app.use(
       cors({
         origin: function (origin, callback) {
-          if (origin && whitelist.indexOf(origin) !== -1) {
-            callback(null, true);
-          } else {
-            callback(null, true);
-            // callback(new Error('Not allowed by CORS'))
-          }
+          callback(null, true);
         },
         credentials: true,
       })
