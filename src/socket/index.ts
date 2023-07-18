@@ -4,7 +4,11 @@ import { bindSocketEvents } from './events';
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from './types';
 
 export const initSocket = (app: App) => {
-  const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(app.getServer());
+  const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(app.getServer(), {
+    cors: {
+      origin: '*',
+    },
+  });
 
   io.on('connection', (socket) => {
     console.log(socket.constructor.name);
