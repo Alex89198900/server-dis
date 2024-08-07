@@ -86,7 +86,7 @@ export class App {
         secret: 'gagagigu89',
         store: new MongoStore({
           mongoUrl:
-            'mongodb+srv://alexdark02091989:APM4kzbkY7yZtWQF@discord.sz52rul.mongodb.net/discord?retryWrites=true&w=majority',
+          'mongodb+srv://alexdark02091989:Nv1vE8F3VHgoAnoK@discord.sz52rul.mongodb.net/?retryWrites=true&w=majority&appName=discord',
           mongoOptions: {
             connectTimeoutMS: 10000,
           },
@@ -137,7 +137,7 @@ export class App {
     }
     mongoose
       .connect(
-        'mongodb+srv://alexdark02091989:APM4kzbkY7yZtWQF@discord.sz52rul.mongodb.net/discord?retryWrites=true&w=majority'
+        'mongodb+srv://alexdark02091989:Nv1vE8F3VHgoAnoK@discord.sz52rul.mongodb.net/?retryWrites=true&w=majority&appName=discord'
       )
       .then((result) => {
         // serversController.seedServers();
