@@ -64,14 +64,12 @@ export class App {
     app.set('port', this.port || 3000);
     app.use(express.static(path.join(__dirname, '../../client/dist')));
 
-    // app.use(
-    //   cors({
-    //     origin: function (origin, callback) {
-    //       callback(null, true);
-    //     },
-    //     credentials: true,
-    //   })
-    // );
+    app.use(
+      cors({
+        origin: '*',
+        credentials: true,
+      })
+    );
 
     app.use(compression());
     app.use(express.json());
