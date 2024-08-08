@@ -6,7 +6,9 @@ import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDa
 export const initSocket = (app: App) => {
   const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(app.getServer(), {
     cors: {
-      origin: '*',
+      origin: "http://localhost:8080",
+      allowedHeaders: [ 'Access-Control-Allow-Origin'],
+      credentials:true
     },
   });
 

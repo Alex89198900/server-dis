@@ -65,8 +65,10 @@ export class App {
     app.use(express.static(path.join(__dirname, '../../client/dist')));
 
     app.use(
-      cors({
-        origin: '*',
+      cors({  
+          origin: true,
+          // Allow follow-up middleware to override this CORS for options
+          preflightContinue: true,
         credentials: true,
       })
     );
