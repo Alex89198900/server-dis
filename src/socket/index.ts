@@ -6,7 +6,7 @@ import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDa
 export const initSocket = (app: App) => {
   const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(app.getServer(), {
     cors: {
-      origin: "http://localhost:8080",
+      origin: "https://discord-clone-two.netlify.app/",
       allowedHeaders: [ 'Access-Control-Allow-Origin'],
       credentials:true
     },
