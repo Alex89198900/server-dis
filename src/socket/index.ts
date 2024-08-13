@@ -8,7 +8,7 @@ export const initSocket = (app: App) => {
     cors: {
       origin: "https://discord-clone-two.netlify.app/",
       methods: ["GET", "POST"],
-      //allowedHeaders: [ 'Access-Control-Allow-Origin'],
+      allowedHeaders: ["my-custom-header"],
       credentials:true
     },
   });
