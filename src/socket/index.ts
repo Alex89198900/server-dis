@@ -5,11 +5,12 @@ import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDa
 
 export const initSocket = (app: App) => {
   const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(app.getServer(), {
-    // cors: {
-    //   origin: "*",
-    //   allowedHeaders: [ 'Access-Control-Allow-Origin'],
-    //   credentials:true
-    // },
+    cors: {
+      origin: "https://discord-clone-two.netlify.app/",
+      methods: ["GET", "POST"],
+      //allowedHeaders: [ 'Access-Control-Allow-Origin'],
+      credentials:true
+    },
   });
 
   io.on('connection', (socket) => {
